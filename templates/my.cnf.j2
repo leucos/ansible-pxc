@@ -1,0 +1,38 @@
+
+[mysql]
+prompt='mysql [{{ inventory_hostname }}] > '
+
+[mysqld]
+bind-address    = {{ hostvars[inventory_hostname]['ansible_' + pxc_bind_interface].ipv4.address }} 
+datadir = /var/lib/mysql
+log_warnings=2
+server_id=1
+log_bin=percona-bin
+log_slave_updates
+binlog_format = ROW
+enforce_gtid_consistency=1
+gtid_mode=on
+
+{# list of cluster members #}
+{% set cluster_members = [] -%}
+
+{%- for node in groups[pxc_cluster_group] %}
+  {%- set _ = cluster_members.append(hostvars[node]['ansible_' + pxc_bind_interface].ipv4.address) -%}
+{% endfor -%}
+wsrep_cluster_address   = gcomm://{{ ",".join(cluster_members) }}
+wsrep_cluster_name      = {{ pxc_cluster_name }}
+wsrep_node_name         = {{ inventory_hostname }}
+wsrep_node_address      = {{ hostvars[inventory_hostname]['ansible_' + pxc_bind_interface].ipv4.address }}
+# wsrep_provider_options="base_host={{ hostvars[inventory_hostname]['ansible_' + pxc_bind_interface].ipv4.address }}"
+
+wsrep_provider = /usr/lib/libgalera_smm.so
+wsrep_sst_method = xtrabackup-v2
+wsrep_sst_auth = {{ pxc_cluster_sst_user }}:{{ pxc_cluster_sst_password }}
+innodb_locks_unsafe_for_binlog = 1
+innodb_autoinc_lock_mode = 2
+#
+# !includedir /etc/mysql/conf.d/
+
+# wsrep_slave_threads={{ ansible_processor_cores }}
+# wsrep_notify_cmd=/usr/local/bin/wsrep_notify.sh
+# wsrep_sst_receive_address={{ hostvars[inventory_hostname]['ansible_' + pxc_bind_interface].ipv4.address }}

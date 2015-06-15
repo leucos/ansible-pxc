@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+# {{ ansible_managed }}
+#
+
+# How many backups to keep
+KEEP={{ mysql_backup.keep }}
+DEST="{{ mysql_backup.destination }}"
+PASS="{{ mysql_root_password }}"
+
+DB=`echo "show databases;" | mysql --password=$PASS | tail -n +2 | grep -v information_schema | grep -v performance_schema`
+for j in $DB; do
+  [[ $1 == '-v' ]] && echo -n "Backuping $j..." 
+  DATE=`date +%Y%m%d_%H%M%S`
+  mysqldump --password=$PASS --single-transaction $j 2> /tmp/error | bzip2 > $DEST/$j-$DATE.sql.bz2
+  if [ $? != 0 ]; then
+    echo "Error backuping (mysqldump) $j :"
+    cat /tmp/error
+    echo
+  else
+    [[ $1 == '-v' ]] && echo done
+  fi
+
+  # remove older backups for mysqldump
+  COUNT=$(( `ls  $DEST/$j-* | wc -l` - $KEEP ))
+  if [ $COUNT -gt 0 ]; then
+    [[ $1 == '-v' ]] && echo "Erasing $COUNT old backups (mysqldump) for $j"
+    for i in `ls $DEST/$j-* | head -$COUNT`; do
+      rm $i
+    done
+  fi
+
+  if [ -n "{{ mysql_backup.s3bucket }}" ]; then
+    s3cmd sync --delete-removed {{ mysql_backup.destination }}/  s3://{{ mysql_backup.s3bucket }}/
+  fi
+done
+

@@ -1,0 +1,161 @@
+##
+# Percona database setup.
+#
+#
+
+- name: Adds percona key
+  apt_key: >
+    keyserver=keys.gnupg.net
+    id=1C4CBDCDCD2EFD2A
+
+- name: Adds percona repositories
+  apt_repository: >
+    repo='deb http://repo.percona.com/apt {{ ansible_distribution_release }} main'
+    state=present
+
+- name: Sets root password
+  debconf: 
+    name: "percona-xtradb-cluster-56"
+    question: "{{ item }}" 
+    value: "{{ pxc_root_password }}" 
+    vtype: 'password'
+  changed_when: false
+  with_items:
+    - 'root_password'
+    - 'root_password_again'
+
+- name: Sets root password again
+  debconf: 
+    name: "percona-xtradb-cluster-server-5.6"
+    question: "percona-xtradb-cluster-server/{{ item }}" 
+    value: "{{ pxc_root_password }}" 
+    vtype: 'password'
+  changed_when: false
+  with_items:
+    - 'root_password'
+    - 'root_password_again'
+
+- name: Configures for easy access as root user
+  template:
+    src: "../templates/root_my.cnf.j2"
+    dest: /root/.my.cnf
+
+- name: Installs percona-server
+  apt: >
+    pkg="percona-xtradb-cluster-{{ pxc_version|replace('.','') }}"
+    state=present
+  register: pxcr_installed
+  notify: Restart pxc non primary
+
+- name: Installs additional tools
+  apt: >
+    pkg={{item}}
+    state=latest
+  with_items:
+    - percona-xtrabackup
+    - percona-toolkit
+
+- name: Adds mysql config
+  template: >
+    src="../templates/my.cnf.j2"
+    dest="/etc/mysql/my.cnf"
+  notify: Start pxc
+  tags: percona:config
+
+- name: Stop all instances
+  service: name=mysql state=stopped 
+  when: pxcr_installed|changed
+
+- name: Bootstrap PXC when installed
+  shell: service mysql bootstrap-pxc
+  when: pxcr_installed|changed and inventory_hostname == pxc_cluster_primary
+
+- name: Adds Python MySQL support
+  apt: pkg="python-mysqldb" state=latest
+
+- name: Adds replication user
+  mysql_user: >
+    priv=*.*:"GRANT,RELOAD,REPLICATION CLIENT,LOCK TABLES"
+    user={{ pxc_cluster_sst_user }}
+    password={{ pxc_cluster_sst_password }}
+    host=localhost
+  when: inventory_hostname == pxc_cluster_primary
+  tags: foobar
+  
+# # In this case, mysql_user will fail connecting to mysql
+# - name: Sets the root password (first attempt / failure is ok)
+#   mysql_user: >
+#     user=root
+#     password="{{ pxc_root_password }}"
+#     host=localhost
+#   ignore_errors: yes
+
+# - name: Configures for easy access as root user
+#   template: >
+#     src="../templates/root_my.cnf.j2"
+#     dest=/root/.my.cnf
+
+# - name: Sets the root password (second attempt)
+#   mysql_user: >
+#     user=root
+#     password="{{ pxc_root_password }}"
+#     host=localhost
+#   ignore_errors: yes
+
+# - name: Deletes anonymous MySQL server user for ansible_fqdn
+#   mysql_user: >
+#     user="" host="{{ ansible_fqdn }}"
+#     state="absent"
+
+# - name: Deletes anonymous MySQL server user for localhost
+#   mysql_user: >
+#     user=""
+#     state="absent"
+
+# - name: Adds required MySQL users
+#   mysql_user: >
+#     user="{{ item.name }}"
+#     password="{{ item.password }}"
+#     priv="{{ item.privs }}"
+#   with_items: mysql_users
+#   when: mysql_users is defined
+
+# - name: Adds required MySQL users with hosts
+#   mysql_user: >
+#     user="{{ item.name }}"
+#     password="{{ item.password }}"
+#     priv="{{ item.privs }}"
+#     host="{{ item.host }}"
+#   with_items: mysql_users
+#   when: item.host is defined and mysql_users is defined
+
+# - name: Secures the MySQL root user for IPV6 localhost (::1)
+#   mysql_user: >
+#     user="root"
+#     password="{{ pxc_root_password }}"
+#     host="::1"
+
+# - name: Secures the MySQL root user for IPV4 localhost (127.0.0.1)
+#   mysql_user: >
+#     user="root"
+#     password="{{ pxc_root_password }}"
+#     host="127.0.0.1"
+
+# - name: Secures the MySQL root user for localhost domain (localhost)
+#   mysql_user: >
+#     user="root"
+#     password="{{ pxc_root_password }}"
+#     host="localhost"
+
+# - name: Secures the MySQL root user for server_hostname domain
+#   mysql_user: >
+#     user="root"
+#     password="{{ pxc_root_password }}"
+#     host="{{ ansible_fqdn }}"
+
+# - name: Removes the MySQL test database
+#   mysql_db: >
+#     db=test
+#     state=absent
+#   notify: Restart percona
+

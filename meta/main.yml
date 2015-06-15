@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  author: Michel Blanc
+  description: Percona Xtra DB cluster
+  company: devops.works
+  license: MIT
+  min_ansible_version: 1.9
+
+  platforms:
+    - name: Ubuntu
+      versions:
+       - trusty
+    - name: Debian
+      versions:
+        - wheezy
+
+  categories:
+    - database
+
+dependencies:
+  - { role: leucos.s3cmd,
+      when: 'pxc_backup is defined and pxc_backup.s3bucket is defined' }

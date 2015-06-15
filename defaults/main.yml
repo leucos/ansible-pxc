@@ -1,0 +1,38 @@
+# pxc_backup:
+#  crontime: [cronentry] cron entry that triggers the backup
+#  keep: [number] how many backups do we keep
+#  destination: [destination] directory in the filesystem to put backups in
+#  s3bucket: [bucketaddess] when defined, this will trigger a 
+#            sync from pxc_backup.destination to s3 bucket
+#
+# pxc_users:
+#   - { user: foo,
+#       password: "bar",
+#       priv="*.*:ALL"
+#       host="somehost" }
+
+# pxc_backup: are we doing backups ?
+pxc_backup: false
+# pxc_backup_crontime: cron entry that triggers the backup
+pxc_backup_crontime: * * * * *
+# pxc_backup_destination: where do we store local backups
+pxc_backup_destination: /tmp
+# pxc_backup_keep: how many backups do we keep
+pxc_backup_keep: 30
+# pxc_backup_s3bucket: when defined, this will trigger a sync from
+#   pxc_backup_destination to s3 bucket
+pxc_backup_s3bucket: false
+
+# which interface do we bind for general mysql daemon
+pxc_bind_interface: "eth1"
+# Define cluster group somewhere
+pxc_cluster_group: false
+pxc_cluster_name: my_pxc_cluster
+# Set primary inventory_hostame
+pxc_cluster_primary: false
+pxc_cluster_sst_password: bar
+pxc_cluster_sst_user: foo
+
+pxc_root_password: "changeme"
+
+pxc_version: "5.6"

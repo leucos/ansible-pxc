@@ -1,0 +1,8 @@
+- include: check_vars.yml tags=pxc,pxc:install
+
+- include: pxc.yml tags=pxc,pxc:install
+
+- include: client.yml tags=pxc,pxc-client
+
+- include: backup.yml tags=backup,pxc
+   when: pxc_backup

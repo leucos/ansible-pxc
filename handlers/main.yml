@@ -1,0 +1,9 @@
+- name: Restart pxc
+  service: name=mysql state=restarted
+
+- name: Start pxc
+  action: service name=mysql state=started
+
+- name: Restart pxc non primary
+  service: name=mysql state=restarted
+  when: inventory_hostname == pxc_cluster_primary
