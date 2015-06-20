@@ -5,4 +5,4 @@
 - include: client.yml tags=pxc,pxc-client
 
 - include: backup.yml tags=backup,pxc
-   when: pxc_backup
+  when: pxc_backup
