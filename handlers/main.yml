@@ -1,9 +1,41 @@
-- name: Restart pxc
-  service: name=mysql state=restarted
+# - name: Restart pxc 
+#   service: name=mysql state=restarted
+#   run_once: true
+#   with_items: play_hosts
+#   delegate_to: "{{ item }}"
 
-- name: Start pxc
-  action: service name=mysql state=started
+- name: Restart pxc cluster
+  debug: msg="Trying to restart cluster with 'Restart pxc cluster safe'"
+  changed_when: true
+  notify:
+    - Restart pxc cluster safe
+    - Bootstrap pxc primary
+
+# - name: Bootstrap pxc cluster
+#   debug: msg="Bootstrapping primary then restarting nodes"
+#   changed_when: true
+#   notify:
+#     - Bootstrap pxc primary
+
+- name: Bootstrap pxc primary
+  command: service mysql bootstrap-pxc
+  when: inventory_hostname == pxc_cluster_primary
+  notify:
+    - Restart pxc non primary
 
 - name: Restart pxc non primary
   service: name=mysql state=restarted
-  when: inventory_hostname == pxc_cluster_primary
+  when: item != pxc_cluster_primary
+  run_once: true
+  ignore_errors: true
+  with_items: play_hosts
+  delegate_to: "{{ item }}"
+
+- name: Restart pxc cluster safe
+  service: name=mysql state=started
+  run_once: true
+  with_items: play_hosts
+  ignore_errors: true
+  delegate_to: "{{ item }}"
+  register: __pxc_restart_cluster_failed
+  when: not __pxc_installed|changed

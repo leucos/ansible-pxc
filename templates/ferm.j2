@@ -1,0 +1,14 @@
+{% import 'variables.inc' as var with context %}
+
+# Allow access to clients
+protocol tcp dport 3306 {
+  @def $ITEMS = ( @ipfilter( ( {{ var.mysql_allow | unique | join(" ") }} ) ) );
+  saddr $ITEMS ACCEPT;
+}
+
+# Allow access to cluster members
+protocol tcp dport (4444 4567 4568) {
+  @def $ITEMS = ( @ipfilter( ( {{ var.cluster_members | unique | join(" ") }} ) ) );
+  saddr $ITEMS ACCEPT;
+}
+

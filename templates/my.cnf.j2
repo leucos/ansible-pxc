@@ -1,4 +1,4 @@
-
+# 
 [mysql]
 prompt='mysql [{{ inventory_hostname }}] > '
 
@@ -28,8 +28,18 @@ wsrep_node_address      = {{ hostvars[inventory_hostname]['ansible_' + pxc_bind_
 wsrep_provider = /usr/lib/libgalera_smm.so
 wsrep_sst_method = xtrabackup-v2
 wsrep_sst_auth = {{ pxc_cluster_sst_user }}:{{ pxc_cluster_sst_password }}
+
+# InnoDB config
 innodb_locks_unsafe_for_binlog = 1
 innodb_autoinc_lock_mode = 2
+{% if ansible_memtotal_mb > 32000 %}
+innodb_buffer_pool_size = {{ (ansible_memtotal_mb - 32000)*1024*1024 }}
+{% else %}
+# Using default innodb_buffer_pool_size since memory is below 8G
+innodb_buffer_pool_size = 128M
+{% endif %}
+
+
 #
 # !includedir /etc/mysql/conf.d/
 

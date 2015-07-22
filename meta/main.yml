@@ -18,5 +18,10 @@ galaxy_info:
     - database
 
 dependencies:
-  - { role: leucos.s3cmd,
-      when: 'pxc_backup is defined and pxc_backup.s3bucket is defined' }
+  - role: ansible-s3cmd
+    src: https://github.com/leucos/ansible-s3cmd.git
+    when: 'pxc_backup is defined and pxc_backup.s3bucket is defined'
+  - role: ansible-ferm
+    src: https://github.com/leucos/ansible-ferm.git
+    when: ferm_enabled | default(false)
+

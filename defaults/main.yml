@@ -14,7 +14,8 @@
 # pxc_backup: are we doing backups ?
 pxc_backup: false
 # pxc_backup_crontime: cron entry that triggers the backup
-pxc_backup_crontime: * * * * *
+# m h dom month dow
+pxc_backup_crontime: "0 0 * * *"
 # pxc_backup_destination: where do we store local backups
 pxc_backup_destination: /tmp
 # pxc_backup_keep: how many backups do we keep
@@ -25,13 +26,23 @@ pxc_backup_s3bucket: false
 
 # which interface do we bind for general mysql daemon
 pxc_bind_interface: "eth1"
-# Define cluster group somewhere
+
+# which interface do we bind for cluster communications
+pxc_cluster_bind_interface: "{{ pxc_bind_interface }}"
+
+# Define ansible cluster group somewhere
 pxc_cluster_group: false
 pxc_cluster_name: my_pxc_cluster
 # Set primary inventory_hostame
 pxc_cluster_primary: false
 pxc_cluster_sst_password: bar
 pxc_cluster_sst_user: foo
+
+# Allowed list for 3306 port access
+# This can contain ansible group names, ansible host names or IPs
+# Not that the role needs facts for hosts and groups to be gathered
+# It won't do it for you
+pxc_filter_allow_mysql_port: false
 
 pxc_root_password: "changeme"
 
