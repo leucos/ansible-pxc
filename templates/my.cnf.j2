@@ -39,7 +39,7 @@ innodb_buffer_pool_size = {{ (ansible_memtotal_mb - 32000)*1024*1024 }}
 innodb_buffer_pool_size = 128M
 {% endif %}
 
-
+innodb_large_prefix={{ "on" if pxc_innodb_large_prefix else "off" }}
 #
 # !includedir /etc/mysql/conf.d/
 

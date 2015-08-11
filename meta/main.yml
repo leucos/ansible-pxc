@@ -24,4 +24,6 @@ dependencies:
   - role: ansible-ferm
     src: https://github.com/leucos/ansible-ferm.git
     when: ferm_enabled | default(false)
-
+  - role: ansible-datadog-agent
+    src: https://github.com/leucos/ansible-datadog-agent.git
+    when: datadog_api_key | default(false)

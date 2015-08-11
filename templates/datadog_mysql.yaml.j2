@@ -1,0 +1,14 @@
+# MySQL integration
+
+init_config:
+
+instances:
+  - server: localhost
+    user: {{ pxc_datadog_user }}
+    pass: {{ pxc_datadog_password }}
+    sock: /var/run/mysqld/mysqld.sock
+    tags:
+        - pxc
+    options:
+        replication: 0
+        galera_cluster: 1

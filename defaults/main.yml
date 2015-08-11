@@ -38,11 +38,15 @@ pxc_cluster_primary: false
 pxc_cluster_sst_password: bar
 pxc_cluster_sst_user: foo
 
+pxc_datadog_user: false
+pxc_datadog_password: false
+
 # Allowed list for 3306 port access
 # This can contain ansible group names, ansible host names or IPs
 # Not that the role needs facts for hosts and groups to be gathered
 # It won't do it for you
 pxc_filter_allow_mysql_port: false
+pxc_innodb_large_prefix: false
 
 pxc_root_password: "changeme"
 

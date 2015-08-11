@@ -1,0 +1,20 @@
+# see :https://app.datadoghq.com/account/settings#integrations/mysql
+
+- name: Creates datadog user
+  mysql_user:
+    name: "{{ pxc_datadog_user }}"
+    password: "{{ pxc_datadog_password }}"
+    priv: "*.*:REPLICATION CLIENT"
+    host: "{{ item }}"
+    state: present
+  with_items:
+    - localhost
+    - 127.0.0.1
+
+- name: Deploys datadog integration
+  template:
+    src: datadog_mysql.yaml.j2
+    dest: /etc/dd-agent/conf.d/mysql.yaml
+  when: datadog_api_key is defined and datadog_api_key
+  notify: Restart datadog-agent
+
