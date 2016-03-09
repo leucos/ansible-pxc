@@ -1,4 +1,7 @@
-# 
+#
+# Ansible managed
+#
+
 [mysql]
 prompt='mysql [{{ inventory_hostname }}] > '
 
@@ -12,6 +15,8 @@ log_slave_updates
 binlog_format = ROW
 enforce_gtid_consistency=1
 gtid_mode=on
+
+max_allowed_packet = {{ pxc_max_allowed_packet }}
 
 {# list of cluster members #}
 {% set cluster_members = [] -%}

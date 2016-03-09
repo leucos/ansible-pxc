@@ -48,6 +48,8 @@ pxc_datadog_password: false
 pxc_filter_allow_mysql_port: false
 pxc_innodb_large_prefix: false
 
+pxc_max_allowed_packet: 4194304
+
 pxc_root_password: "changeme"
 
 pxc_version: "5.6"
