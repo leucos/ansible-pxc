@@ -15,7 +15,7 @@ log_slave_updates
 binlog_format = ROW
 enforce_gtid_consistency=1
 gtid_mode=on
-
+log_error=/var/log/mysql/error.log
 max_allowed_packet = {{ pxc_max_allowed_packet }}
 
 {# list of cluster members #}

@@ -17,7 +17,11 @@
     owner=root
 
 - name: Adds backup crontab entry
-  template: >
-    src="../templates/backup_all_databases.crontab.j2"
-    dest=/etc/cron.d/backup_all_databases
-    mode=0750
+  cron:
+    name: Backups all databases
+    job: /usr/local/bin/backup_all_databases > /dev/null 2>&1 /dev/null
+    user: root
+    day: "{{ pxc_backup_cron_day }}"
+    hour: "{{ pxc_backup_cron_hour }}"
+    minute: "{{ pxc_backup_cron_minute }}"
+
