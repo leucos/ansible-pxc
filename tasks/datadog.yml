@@ -4,7 +4,7 @@
   mysql_user:
     name: "{{ pxc_datadog_user }}"
     password: "{{ pxc_datadog_password }}"
-    priv: "*.*:REPLICATION CLIENT"
+    priv: "*.*:REPLICATION CLIENT,PROCESS"
     host: "{{ item }}"
     state: present
   with_items:
