@@ -13,9 +13,6 @@
 
 # pxc_backup: are we doing backups ?
 pxc_backup: false
-# pxc_backup_crontime: cron entry that triggers the backup
-# m h dom month dow
-pxc_backup_crontime: "0 0 * * *"
 # pxc_backup_destination: where do we store local backups
 pxc_backup_destination: /tmp
 # pxc_backup_keep: how many backups do we keep
@@ -23,6 +20,9 @@ pxc_backup_keep: 30
 # pxc_backup_s3bucket: when defined, this will trigger a sync from
 #   pxc_backup_destination to s3 bucket
 pxc_backup_s3bucket: false
+# pxc_backup_gcloudbucket: when defined, this will trigger a sync from
+#   pxc_backup_destination to gcloud bucket
+pxc_backup_gcloudbucket: false
 
 # which interface do we bind for general mysql daemon
 pxc_bind_interface: "eth1"

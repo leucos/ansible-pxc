@@ -12,13 +12,12 @@
   file:
     path: "{{ pxc_backup_destination }}"
     state: directory
-    mode: 0700
     owner: root
 
 - name: Adds backup crontab entry
   cron:
     name: Backups all databases
-    job: /usr/local/bin/backup_all_databases > /dev/null 2>&1 /dev/null
+    job: /usr/local/bin/backup_all_databases &>> /var/log/pxcbackup.log
     user: root
     day: "{{ pxc_backup_cron_day }}"
     hour: "{{ pxc_backup_cron_hour }}"
