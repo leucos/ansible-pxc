@@ -13,6 +13,8 @@ server_id=1
 log_bin=percona-bin
 log_slave_updates
 binlog_format = ROW
+expire-logs-days = {{ pxc_expire_log_days }}
+
 enforce_gtid_consistency=1
 gtid_mode=on
 log_error=/var/log/mysql/error.log
@@ -40,7 +42,7 @@ innodb_autoinc_lock_mode = 2
 {% if ansible_memtotal_mb > 32000 %}
 innodb_buffer_pool_size = {{ (ansible_memtotal_mb - 32000)*1024*1024 }}
 {% else %}
-# Using default innodb_buffer_pool_size since memory is below 8G
+# Using default innodb_buffer_pool_size since memory is below 32G
 innodb_buffer_pool_size = 128M
 {% endif %}
 

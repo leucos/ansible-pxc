@@ -41,6 +41,9 @@ pxc_cluster_sst_user: foo
 pxc_datadog_user: false
 pxc_datadog_password: false
 
+# Binary log expire
+pxc_expire_log_days: 8
+
 # Allowed list for 3306 port access
 # This can contain ansible group names, ansible host names or IPs
 # Not that the role needs facts for hosts and groups to be gathered

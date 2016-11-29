@@ -5,6 +5,12 @@
 
 - name: Adds percona key
   apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A
+  with_items:
+    - E1E2CD202D607DAF
+    - 1C4CBDCDCD2EFD2A
+    - 9334A25F8507EFA5
+    - 9E003FA64CAC6D72
+  tags: pxc:keys
 
 - name: Adds percona repositories
   apt_repository:
