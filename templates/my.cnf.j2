@@ -39,7 +39,7 @@ wsrep_sst_auth = {{ pxc_cluster_sst_user }}:{{ pxc_cluster_sst_password }}
 # InnoDB config
 innodb_locks_unsafe_for_binlog = 1
 innodb_autoinc_lock_mode = 2
-{% if pxc_innodb_buffer_pool_size %}
+{% if pxc_innodb_buffer_pool_size is defined %}
 innodb_buffer_pool_size = {{ pxc_innodb_buffer_pool_size }}
 {% elif ansible_memtotal_mb > 32000 %}
 innodb_buffer_pool_size = {{ (ansible_memtotal_mb - 32000)*1024*1024 }}
