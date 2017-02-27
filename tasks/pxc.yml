@@ -23,8 +23,8 @@
 - name: Sets root password
   debconf: 
     name: "percona-xtradb-cluster-56"
-    question: "{{ item }}" 
-    value: "{{ pxc_root_password }}" 
+    question: "{{ item }}"
+    value: "{{ pxc_root_password }}"
     vtype: 'password'
   changed_when: false
   with_items:
@@ -75,16 +75,16 @@
 # We have to ignore errors so we can recover from cluster failuer and try to
 # bootstrap it again
 - name: Adds replication user
-  mysql_user: >
-    priv=*.*:"GRANT,RELOAD,REPLICATION CLIENT,LOCK TABLES"
-    user={{ pxc_cluster_sst_user }}
-    password={{ pxc_cluster_sst_password }}
-    host=localhost
+  mysql_user:
+    priv: "*.*:GRANT,RELOAD,REPLICATION CLIENT,LOCK TABLES"
+    user: "{{ pxc_cluster_sst_user }}"
+    password: "{{ pxc_cluster_sst_password }}"
+    host: localhost
   ignore_errors: true
   when: inventory_hostname == pxc_cluster_primary
 
 - name: Stop all instances
-  service: name=mysql state=stopped 
+  service: name=mysql state=stopped
   when: __pxc_installed|changed
 
 - name: Adds mysql config
