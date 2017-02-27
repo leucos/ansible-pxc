@@ -17,13 +17,4 @@ galaxy_info:
   categories:
     - database
 
-dependencies:
-  - role: ansible-s3cmd
-    src: https://github.com/leucos/ansible-s3cmd.git
-    when: 'pxc_backup is defined and pxc_backup.s3bucket is defined'
-  - role: ansible-ferm
-    src: https://github.com/leucos/ansible-ferm.git
-    when: ferm_enabled | default(false)
-  - role: ansible-datadog-agent
-    src: https://github.com/leucos/ansible-datadog-agent.git
-    when: datadog_api_key | default(false)
+dependencies: []
