@@ -74,7 +74,7 @@
   apt:
     pkg: "{{ item }}"
     state: latest
-  when: pxc_version|versioncompare('5.7','<')
+  when: pxc_version|version_compare('5.7','<')
   with_items:
     - percona-xtrabackup
     - percona-toolkit
