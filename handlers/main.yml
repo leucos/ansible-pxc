@@ -28,14 +28,14 @@
   when: item != pxc_cluster_primary
   run_once: true
   ignore_errors: true
-  with_items: play_hosts
+  with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
 
 - name: Restart pxc cluster safe
   service: name=mysql state=started
   run_once: true
-  with_items: play_hosts
   ignore_errors: true
+  with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   register: __pxc_restart_cluster_failed
   when: not __pxc_installed|changed

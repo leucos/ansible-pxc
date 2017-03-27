@@ -83,7 +83,7 @@
 # bootstrap it again
 - name: Adds replication user
   mysql_user:
-    priv: "*.*:GRANT,RELOAD,REPLICATION CLIENT,LOCK TABLES"
+    priv: "*.*:GRANT,RELOAD,REPLICATION CLIENT,LOCK TABLES,PROCESS"
     user: "{{ pxc_cluster_sst_user }}"
     password: "{{ pxc_cluster_sst_password }}"
     host: localhost
