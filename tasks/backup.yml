@@ -1,7 +1,7 @@
 ##
 # MySQL DB dumping.
 #
-#  
+#
 - name: Installs backup script
   template:
     src: "../templates/backup_all_databases.j2"
@@ -22,4 +22,4 @@
     day: "{{ pxc_backup_cron_day }}"
     hour: "{{ pxc_backup_cron_hour }}"
     minute: "{{ pxc_backup_cron_minute }}"
-  tags: cron
+  tags: ["cron"]

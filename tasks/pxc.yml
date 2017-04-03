@@ -100,7 +100,7 @@
     dest: "/etc/mysql/my.cnf"
     backup: yes
   notify: Restart pxc cluster
-  tags: pxc:config
+  tags: ["pxc:config"]
 
 # - name: Deletes anonymous MySQL server user for ansible_fqdn
 #   mysql_user: >
