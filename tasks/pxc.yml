@@ -13,7 +13,7 @@
     - 1C4CBDCDCD2EFD2A
     - 9334A25F8507EFA5
     - 9E003FA64CAC6D72
-  tags: pxc:keys
+  tags: ["pxc:keys"]
 
 - name: Adds percona repositories
   apt_repository:
@@ -52,7 +52,7 @@
     src: "../templates/ferm.j2"
     dest: /etc/ferm/filter-input.d/60_mysql.conf
   when: ferm_enabled | default(false)
-  tags: ferm
+  tags: ["ferm"]
   notify: Restart ferm
 
 - name: Installs percona-server
