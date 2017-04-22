@@ -1,7 +1,13 @@
 - name: Checking that required variables are set
   fail: msg="{{ item }} is not defined"
-  when: not {{ item }} 
+  when: not item
   with_items:
     - pxc_cluster_group
     - pxc_cluster_primary
     - pxc_filter_allow_mysql_port
+
+- name: Checking that pxc_cluster_primary is in pxc_cluster_group
+  fail:
+    msg: "CHECK ERROR: {{ pxc_cluster_primary }} is not in group {{ pxc_cluster_group }}"
+  when: pxc_cluster_primary not in groups[pxc_cluster_group]
+
