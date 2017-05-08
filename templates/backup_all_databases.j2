@@ -31,11 +31,11 @@ for j in $DB; do
     done
   fi
 
-  if [ -n "{{ pxc_backup_s3bucket|default('') }}" ]; then
+  if [ -n "{{ pxc_backup_s3bucket }}" ]; then
     s3cmd sync --delete-removed ${DEST}/  s3://{{ pxc_backup_s3bucket }}/
   fi
 
-  if [ -n "{{ pxc_backup_gcloudbucket|default('') }}" ]; then
+  if [ -n "{{ pxc_backup_gcloudbucket }}" ]; then
     gsutil -m rsync -r ${DEST} gs://{{ pxc_backup_gcloudbucket }}/$(hostname)/
   fi
 done
