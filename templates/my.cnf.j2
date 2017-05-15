@@ -50,7 +50,7 @@ innodb_buffer_pool_size = 128M
 
 innodb_large_prefix={{ "on" if pxc_innodb_large_prefix else "off" }}
 #
-# !includedir /etc/mysql/conf.d/
+!includedir /etc/mysql/conf.d/
 
 # wsrep_slave_threads={{ ansible_processor_cores }}
 # wsrep_notify_cmd=/usr/local/bin/wsrep_notify.sh
