@@ -4,15 +4,6 @@
 - include: pxc.yml
   tags: ["pxc","pxc:install"]
 
-#- include: client.yml tags=pxc,pxc-client
-- include: monitoring.yml
-  tags: ["pxc","pxc:client","pcx:monitoring"]
-  when: pxc_monitoring_user is defined and pxc_monitoring_user and pxc_monitoring_password is defined and pxc_monitoring_password
-
-- include: datadog.yml
-  tags: ["pxc","pcx:client","datadog"]
-  when: pxc_datadog_user is defined and pxc_datadog_password is defined and datadog_enabled
-
 - include: backup.yml
   tags: ["pxc","pcx:backup","backup"]
   when: pxc_backup is defined and pxc_backup
