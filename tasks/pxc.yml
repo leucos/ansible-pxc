@@ -107,14 +107,23 @@
   service: name=mysql state=stopped
   when: __pxc_installed|changed
 
-- name: Adds mysql configs
+- name: Adds mysql config
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/mysql/conf.d/local_{{ item }}"
+    dest: "/etc/mysql/conf.d/99_local_{{ item }}"
     backup: yes
   with_items:
     - mysqld.cnf
-    - charset.cnf
+  notify: Restart pxc cluster
+  tags: ["pxc:config"]
+
+- name: Adds pxc config
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/mysql/percona-xtradb-cluster.conf.d/99_local_{{ item }}"
+    backup: yes
+  with_items:
+    - wsrep.cnf
   notify: Restart pxc cluster
   tags: ["pxc:config"]
 
