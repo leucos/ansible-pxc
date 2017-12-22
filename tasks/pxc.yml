@@ -107,7 +107,7 @@
   service: name=mysql state=stopped
   when: __pxc_installed|changed
 
-- name: Adds mysql charsey config
+- name: Adds mysql charset config
   template:
     src: "{{ item }}.j2"
     dest: "/etc/mysql/conf.d/zz_local_{{ item }}"
