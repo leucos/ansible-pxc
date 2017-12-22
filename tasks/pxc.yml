@@ -110,7 +110,7 @@
 - name: Adds mysql charsey config
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/mysql/conf.d/99_local_{{ item }}"
+    dest: "/etc/mysql/conf.d/zz_local_{{ item }}"
     backup: yes
   with_items:
     - charset.cnf
@@ -120,7 +120,7 @@
 - name: Adds pxc config
   template:
     src: "{{ item }}.j2"
-    dest: "/etc/mysql/percona-xtradb-cluster.conf.d/99_local_{{ item }}"
+    dest: "/etc/mysql/percona-xtradb-cluster.conf.d/zz_local_{{ item }}"
     backup: yes
   with_items:
     - wsrep.cnf
