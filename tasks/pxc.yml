@@ -107,13 +107,13 @@
   service: name=mysql state=stopped
   when: __pxc_installed|changed
 
-- name: Adds mysql config
+- name: Adds mysql charsey config
   template:
     src: "{{ item }}.j2"
     dest: "/etc/mysql/conf.d/99_local_{{ item }}"
     backup: yes
   with_items:
-    - mysqld.cnf
+    - charset.cnf
   notify: Restart pxc cluster
   tags: ["pxc:config"]
 
