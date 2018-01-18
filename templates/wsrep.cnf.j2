@@ -7,7 +7,7 @@ prompt='mysql [{{ inventory_hostname }}] > '
 
 [mysqld]
 bind-address    = {{ hostvars[inventory_hostname]['ansible_' + pxc_bind_interface].ipv4.address }} 
-datadir = /var/lib/mysql
+datadir = {{ pxc_datadir }}
 log_warnings=2
 server_id=1
 log_bin=percona-bin

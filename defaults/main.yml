@@ -53,6 +53,9 @@ pxc_innodb_large_prefix: false
 
 pxc_max_allowed_packet: 4194304
 
+# Datadir
+pxc_datadir: /var/lib/mysql
+
 pxc_root_password: "changeme"
 
 pxc_version: "5.6"
