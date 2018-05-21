@@ -49,7 +49,9 @@ innodb_buffer_pool_size = 128M
 {% endif %}
 
 innodb_large_prefix={{ "on" if pxc_innodb_large_prefix else "off" }}
-#
+
+pxc_strict_mode = {{ pxc_strict_mode }}
+
 !includedir /etc/mysql/conf.d/
 
 # wsrep_slave_threads={{ ansible_processor_cores }}
