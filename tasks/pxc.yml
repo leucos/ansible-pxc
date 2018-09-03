@@ -127,6 +127,12 @@
   notify: Restart pxc cluster
   tags: ["pxc:config"]
 
+- name: Adds logrotate config
+  template:
+    src: "../templates/logrotate.j2"
+    dest: "/etc/logrotate.d/percona-xtradb-cluster-server-{{ pxc_version }}"
+  tags: ["pxc:config"]
+
 # - name: Deletes anonymous MySQL server user for ansible_fqdn
 #   mysql_user: >
 #     user="" host="{{ ansible_fqdn }}"
