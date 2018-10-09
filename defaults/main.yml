@@ -58,6 +58,6 @@ pxc_datadir: /var/lib/mysql
 
 pxc_root_password: "changeme"
 
-pxc_strict_mode: ENFORCING
+pxc_strict_mode: PERMISSIVE
 
 pxc_version: "5.6"
