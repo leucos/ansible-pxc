@@ -13,7 +13,7 @@ DB=`echo "show databases;" | mysql --password=$PASS | tail -n +2 | grep -v infor
 for j in $DB; do
   [[ $1 == '-v' ]] && echo -n "Backuping $j..." 
   DATE=`date +%Y%m%d_%H%M%S`
-  mysqldump --password=$PASS --single-transaction $j 2> /tmp/error | bzip2 > $DEST/$j-$DATE.sql.bz2
+  mysqldump --password=$PASS ---routines --triggers --single-transaction $j 2> /tmp/error | bzip2 > $DEST/$j-$DATE.sql.bz2
   if [ $? != 0 ]; then
     echo "Error backuping (mysqldump) $j :"
     cat /tmp/error
