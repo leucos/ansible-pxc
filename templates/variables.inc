@@ -1,6 +1,6 @@
 {% set cluster_members = [] -%}
 {%- for node in groups[pxc_cluster_group] %}
-  {%- set _ = cluster_members.append(hostvars[node]['ansible_' + pxc_cluster_bind_interface].ipv4.address) -%}
+  {%- set _ = cluster_members.append(hostvars[node]['ansible_' + hostvars[node].pxc_cluster_bind_interface].ipv4.address) -%}
 {% endfor -%}
 {# #}
 {% set mysql_allow = [] -%}

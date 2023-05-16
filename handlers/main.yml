@@ -38,4 +38,4 @@
   with_items: "{{ play_hosts }}"
   delegate_to: "{{ item }}"
   register: __pxc_restart_cluster_failed
-  when: not __pxc_installed|changed
+  when: not __pxc_installed is changed
